@@ -16,6 +16,10 @@ namespace WorkShop22
 
         internal decimal Result(DateTime startTime, DateTime endTime)
         {
+            if (startTime>endTime)
+            {
+                throw new ArgumentException();
+            }
             var budgets = _budRepository.GetBudgets();
             var total = 0m;
             if (startTime.Month == endTime.Month)

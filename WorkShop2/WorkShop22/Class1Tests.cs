@@ -29,41 +29,47 @@ namespace WorkShop2.Tests
             BudgetResultShouldBe(new DateTime(2018, 6, 1), new DateTime(2018, 6, 15), 150m);
         }
         [TestMethod()]
-        public void Test09()
+        public void TwoMonthBothNotBudget()
         {
             BudgetResultShouldBe(new DateTime(2018, 3, 1), new DateTime(2018, 4, 2), 0m);
         }
         [TestMethod()]
-        public void Test07()
+        public void TwoMonth_StartMonthNoBudget_EndMonthHasBudget()
         {
             BudgetResultShouldBe(new DateTime(2018, 5, 20), new DateTime(2018, 6, 10), 100m);
         }
         [TestMethod()]
-        public void Test08()
+        public void TwoMonth_StartMonthHasBudget_EndMonthNoBudget()
         {
             BudgetResultShouldBe(new DateTime(2018, 7, 30), new DateTime(2018, 8, 22), 20m);
         }
         [TestMethod()]
-        public void Test06()
+        public void TwoMonthBothBudget()
         {
             BudgetResultShouldBe(new DateTime(2018, 6, 15), new DateTime(2018, 7, 14), 300m);
         }
         [TestMethod()]
-        public void Test10()
+        public void OverYearBudget()
         {
             BudgetResultShouldBe(new DateTime(2017, 12, 1), new DateTime(2018, 2, 1), 10m);
         }
         [TestMethod()]
-        public void Test11()
+        public void OverYearBudget_EndYearHas2Budget()
         {
             BudgetResultShouldBe(new DateTime(2017, 11, 1), new DateTime(2018, 6, 30), 580m);
         }
         [TestMethod()]
-        public void Test12()
+        public void AllYearBudget()
         {
             BudgetResultShouldBe(new DateTime(2018, 01, 1), new DateTime(2018, 12, 31), 890);
         }
 
+        [ExpectedException(typeof(ArgumentException))]
+        [TestMethod()]
+        public void ThrowExpection()
+        {
+            var result = _budgetCalculate.Result(new DateTime(2018, 5, 1), new DateTime(2018, 4, 30));
+        }
         private void BudgetResultShouldBe(DateTime startTime, DateTime endTime, decimal expected)
         {
             var actual = _budgetCalculate.Result(startTime, endTime);
