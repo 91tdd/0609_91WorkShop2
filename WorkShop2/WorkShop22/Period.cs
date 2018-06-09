@@ -6,12 +6,13 @@ namespace WorkShop22
     {
         public Period(DateTime startTime, DateTime endTime)
         {
-            StartTime = startTime;
-            EndTime = endTime;
-            if (StartTime > EndTime)
+            if (startTime > endTime)
             {
                 throw new ArgumentException();
             }
+
+            StartTime = startTime;
+            EndTime = endTime;
         }
 
         public DateTime EndTime { get; private set; }
