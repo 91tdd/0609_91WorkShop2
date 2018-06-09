@@ -43,40 +43,12 @@ namespace WorkShop22
                 var budget = budgets.SingleOrDefault(x => x.YearMonth == currentMonth.ToString("yyyyMM"));
                 if (budget != null)
                 {
-                    var amountOfCurrentMonth = period.OverlappingDays(new Period(budget.FirstDay, budget.LastDay)) * budget.DailyAmount();
-                    total += amountOfCurrentMonth;
+                    total += budget.OverlappingAmount(period);
                 }
                 currentMonth = currentMonth.AddMonths(1);
             }
 
             return total;
-        }
-
-        private static bool IsLastMonthOfPeriod(Period period, DateTime currentMonth)
-        {
-            return currentMonth.ToString("yyyyMM") == period.EndTime.ToString("yyyyMM");
-        }
-
-        private static bool IsFirstMonthOfPeriod(Period period, DateTime currentMonth)
-        {
-            return currentMonth.ToString("yyyyMM") == period.StartTime.ToString("yyyyMM");
-        }
-
-        private static DateTime GetFirstDay(DateTime currentDate)
-        {
-            return new DateTime(currentDate.Year, currentDate.Month, 1);
-        }
-
-        private static DateTime GetLastDay(DateTime currentDate)
-        {
-            return new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(1).AddDays(-1);
-        }
-
-        private static bool IsOver2Months(DateTime startTime, DateTime endTime)
-        {
-            var startTime1 = new DateTime(startTime.Year, startTime.Month, 1);
-            var endTime1 = new DateTime(endTime.Year, endTime.Month, 1);
-            return startTime1.AddMonths(2) < endTime1;
         }
     }
 }

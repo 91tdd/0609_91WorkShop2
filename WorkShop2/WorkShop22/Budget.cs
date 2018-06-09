@@ -1,4 +1,5 @@
 ﻿using System;
+using WorkShop22;
 
 namespace WorkShop2.Tests
 {
@@ -31,6 +32,17 @@ namespace WorkShop2.Tests
         public int DailyAmount()
         {
             return Amount / DaysInMonth;
+        }
+
+        public Period PeriodFromBudget()
+        {
+            var periodFromBudget = new Period(FirstDay, LastDay);
+            return periodFromBudget;
+        }
+
+        public int OverlappingAmount(Period period)
+        {
+            return period.OverlappingDays(PeriodFromBudget()) * DailyAmount();
         }
     }
 }
