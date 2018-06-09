@@ -14,19 +14,8 @@ namespace WorkShop22
             }
         }
 
-        public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
-
-        public bool IsSameMonth()
-        {
-            return StartTime.Month == EndTime.Month;
-        }
-
-        public int Days()
-        {
-            var days = EndTime.Subtract(StartTime).Days + 1;
-            return days;
-        }
+        public DateTime StartTime { get; private set; }
 
         public int OverlappingDays(Period otherPeriod)
         {
@@ -43,8 +32,12 @@ namespace WorkShop22
                 ? EndTime
                 : otherPeriod.EndTime;
 
-            var overlappingDays = new Period(overlapStartDate, overlapEndDate).Days();
-            return overlappingDays;
+            return new Period(overlapStartDate, overlapEndDate).Days();
+        }
+
+        private int Days()
+        {
+            return EndTime.Subtract(StartTime).Days + 1;
         }
 
         private bool HasNoOverlap(Period otherPeriod)
