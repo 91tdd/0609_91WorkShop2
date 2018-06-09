@@ -16,7 +16,7 @@ namespace WorkShop22
 
         internal decimal Result(DateTime startTime, DateTime endTime)
         {
-            if (startTime>endTime)
+            if (IsInputError(startTime, endTime))
             {
                 throw new ArgumentException();
             }
@@ -26,9 +26,9 @@ namespace WorkShop22
             {
                 return CaluateBudget(startTime, endTime, budgets);
             }
-            total += CaluateBudget(startTime, new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1), budgets);
+            total += CaluateBudget(startTime, endDayOfStartTimeMonth(startTime), budgets);
 
-            total += CaluateBudget(new DateTime(endTime.Year, endTime.Month, 1), endTime, budgets);
+            total += CaluateBudget(startDayOfEndTimeMonth(endTime), endTime, budgets);
 
             DateTime Counter = startTime;
             if (IsOver2Months(startTime, endTime))
@@ -40,6 +40,21 @@ namespace WorkShop22
                 } while (Counter.Month != endTime.AddMonths(-1).Month);
             }
             return total;
+        }
+
+        private static DateTime startDayOfEndTimeMonth(DateTime endTime)
+        {
+            return new DateTime(endTime.Year, endTime.Month, 1);
+        }
+
+        private static DateTime endDayOfStartTimeMonth(DateTime startTime)
+        {
+            return new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1);
+        }
+
+        private static bool IsInputError(DateTime startTime, DateTime endTime)
+        {
+            return startTime>endTime;
         }
 
         private static bool IsOver2Months(DateTime startTime, DateTime endTime)
