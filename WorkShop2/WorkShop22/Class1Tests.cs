@@ -38,6 +38,11 @@ namespace WorkShop2.Tests
         {
             BudgetResultShouldBe(new DateTime(2018, 5, 20), new DateTime(2018, 6, 10), 100m);
         }
+        [TestMethod()]
+        public void Test08()
+        {
+            BudgetResultShouldBe(new DateTime(2018, 7, 30), new DateTime(2018, 8, 22), 20m);
+        }
 
         private void BudgetResultShouldBe(DateTime startTime, DateTime endTime, decimal expected)
         {
