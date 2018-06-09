@@ -17,24 +17,25 @@ namespace WorkShop22
         internal decimal TotalAmount(DateTime startTime, DateTime endTime)
         {
             var period = new Period(startTime, endTime);
+
             var budgets = _budRepository.GetBudgets();
             var total = 0m;
-            if (startTime.Month == endTime.Month)
+            if (period.StartTime.Month == period.EndTime.Month)
             {
-                return CaluateBudget(startTime, endTime, budgets);
+                return CaluateBudget(period.StartTime, period.EndTime, budgets);
             }
-            total += CaluateBudget(startTime, endDayOfStartTimeMonth(startTime), budgets);
+            total += CaluateBudget(period.StartTime, endDayOfStartTimeMonth(period.StartTime), budgets);
 
-            total += CaluateBudget(startDayOfEndTimeMonth(endTime), endTime, budgets);
+            total += CaluateBudget(startDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
 
-            DateTime Counter = startTime;
-            if (IsOver2Months(startTime, endTime))
+            DateTime Counter = period.StartTime;
+            if (IsOver2Months(period.StartTime, period.EndTime))
             {
                 do
                 {
                     total += CaluateBudget(Counter.AddMonths(1), Counter.AddMonths(2).AddDays(-1), budgets);
                     Counter = Counter.AddMonths(1);
-                } while (Counter.Month != endTime.AddMonths(-1).Month);
+                } while (Counter.Month != period.EndTime.AddMonths(-1).Month);
             }
             return total;
         }
