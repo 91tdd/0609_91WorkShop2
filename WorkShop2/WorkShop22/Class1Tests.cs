@@ -1,28 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using System;
+using System.Collections.Generic;
+
 namespace WorkShop2.Tests
 {
     [TestClass()]
     public class Class1Tests
     {
-        [TestMethod()]
-        public void ResultTest()
+        private IRepository<Budget> _budRepository = Substitute.For<IRepository<Budget>>();
+        private WorkShop22.BudgetCalculate _budgetCalculate;
+
+        [TestInitialize]
+        public void TestInit()
         {
-            IRepository<Budget> repo = Substitute.For<IRepository<Budget>>();
-            repo.GetBudgets().Returns(new List<Budget>()
+            _budgetCalculate = GiveBudgets();
+        }
+
+        [TestMethod()]
+        public void OneMonthFullBudget()
+        {
+            BudgetResultShouldBe(new DateTime(2018, 6, 1), new DateTime(2018, 6, 30), 300m);
+        }
+
+        [TestMethod()]
+        public void OneMonthPartialBudget()
+        {
+            BudgetResultShouldBe(new DateTime(2018, 6, 1), new DateTime(2018, 6, 15), 150m);
+        }
+
+        private void BudgetResultShouldBe(DateTime startTime, DateTime endTime, decimal expected)
+        {
+            var actual = _budgetCalculate.Result(startTime, endTime);
+            Assert.AreEqual(expected, actual);
+        }
+
+        private WorkShop22.BudgetCalculate GiveBudgets()
+        {
+            _budRepository.GetBudgets().Returns(new List<Budget>()
             {
-                new Budget() { YearMonth = "201802", Amount = 280 },
-                new Budget() { YearMonth = "201806", Amount = 300 },
-                new Budget() { YearMonth = "201807", Amount = 310 }
-
+                new Budget() {YearMonth = "201802", Amount = 280},
+                new Budget() {YearMonth = "201806", Amount = 300},
+                new Budget() {YearMonth = "201807", Amount = 310}
             });
-            var target = new WorkShop22.BudgetCalculate(repo);
-
-            var actual = target.Result(new DateTime(2018,6,1),new DateTime(2018,6,30));
-            Assert.AreEqual(300m, actual);
+            var target = new WorkShop22.BudgetCalculate(_budRepository);
+            return target;
         }
     }
 }
