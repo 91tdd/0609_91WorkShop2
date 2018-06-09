@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using WorkShop22;
 
 namespace WorkShop2.Tests
@@ -16,7 +16,11 @@ namespace WorkShop2.Tests
         public void TestInit()
         {
             _budgetCalculator = new BudgetCalculator(_budgetRepository);
-            GivenBudgets();
+            GivenBudgets(
+                new Budget { YearMonth = "201802", Amount = 280 },
+                new Budget { YearMonth = "201806", Amount = 300 },
+                new Budget { YearMonth = "201807", Amount = 310 }
+            );
         }
 
         [TestMethod]
@@ -86,14 +90,9 @@ namespace WorkShop2.Tests
             Assert.AreEqual(expected, actual);
         }
 
-        private void GivenBudgets()
+        private void GivenBudgets(params Budget[] budgets)
         {
-            _budgetRepository.GetBudgets().Returns(new List<Budget>
-            {
-                new Budget {YearMonth = "201802", Amount = 280},
-                new Budget {YearMonth = "201806", Amount = 300},
-                new Budget {YearMonth = "201807", Amount = 310}
-            });
+            _budgetRepository.GetBudgets().Returns(budgets.ToList());
         }
     }
 }
