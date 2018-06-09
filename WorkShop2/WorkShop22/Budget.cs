@@ -16,7 +16,7 @@ namespace WorkShop2.Tests
             }
         }
 
-        public DateTime FirstDay
+        private DateTime FirstDay
         {
             get
             {
@@ -24,25 +24,24 @@ namespace WorkShop2.Tests
             }
         }
 
-        public DateTime LastDay
+        private DateTime LastDay
         {
             get { return DateTime.ParseExact(YearMonth + DaysInMonth, "yyyyMMdd", null); }
-        }
-
-        public int DailyAmount()
-        {
-            return Amount / DaysInMonth;
-        }
-
-        public Period PeriodFromBudget()
-        {
-            var periodFromBudget = new Period(FirstDay, LastDay);
-            return periodFromBudget;
         }
 
         public int OverlappingAmount(Period period)
         {
             return period.OverlappingDays(PeriodFromBudget()) * DailyAmount();
+        }
+
+        private int DailyAmount()
+        {
+            return Amount / DaysInMonth;
+        }
+
+        private Period PeriodFromBudget()
+        {
+            return new Period(FirstDay, LastDay);
         }
     }
 }
