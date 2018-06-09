@@ -17,23 +17,24 @@ namespace WorkShop22
         internal decimal TotalAmount(DateTime startTime, DateTime endTime)
         {
             var period = new Period(startTime, endTime);
-
             var budgets = _budRepository.GetBudgets();
-            var total = 0m;
-            if (period.StartTime.Month == period.EndTime.Month)
-            {
-                return CaluateBudget(period.StartTime, period.EndTime, budgets);
-            }
-            total += CaluateBudget(period.StartTime, endDayOfStartTimeMonth(period.StartTime), budgets);
 
-            total += CaluateBudget(startDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
+            var total = 0m;
+            if (period.IsSameMonth())
+            {
+                return CalculateBudget(period.StartTime, period.EndTime, budgets);
+            }
+
+            total += CalculateBudget(period.StartTime, endDayOfStartTimeMonth(period.StartTime), budgets);
+
+            total += CalculateBudget(startDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
 
             DateTime Counter = period.StartTime;
             if (IsOver2Months(period.StartTime, period.EndTime))
             {
                 do
                 {
-                    total += CaluateBudget(Counter.AddMonths(1), Counter.AddMonths(2).AddDays(-1), budgets);
+                    total += CalculateBudget(Counter.AddMonths(1), Counter.AddMonths(2).AddDays(-1), budgets);
                     Counter = Counter.AddMonths(1);
                 } while (Counter.Month != period.EndTime.AddMonths(-1).Month);
             }
@@ -57,9 +58,10 @@ namespace WorkShop22
             return startTime1.AddMonths(2) < endTime1;
         }
 
-        private static int CaluateBudget(DateTime startTime, DateTime endTime, List<Budget> budgets)
+        private static int CalculateBudget(DateTime startTime, DateTime endTime, List<Budget> budgets)
         {
-            return (endTime.Subtract(startTime).Days + 1) * GetThisMonthBudget(startTime, budgets) / DateTime.DaysInMonth(startTime.Year, startTime.Month);
+            var days = endTime.Subtract(startTime).Days + 1;
+            return days * GetThisMonthBudget(startTime, budgets) / DateTime.DaysInMonth(startTime.Year, startTime.Month);
         }
 
         private static int GetThisMonthBudget(DateTime startTime, List<Budget> budgets)
