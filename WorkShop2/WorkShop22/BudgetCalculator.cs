@@ -43,11 +43,11 @@ namespace WorkShop22
                 var budget = budgets.SingleOrDefault(x => x.YearMonth == currentMonth.ToString("yyyyMM"));
                 if (budget != null)
                 {
-                    var overlapStartDate = IsFirstMonthOfPeriod(period, currentMonth)
+                    var overlapStartDate = period.StartTime > budget.FirstDay
                         ? period.StartTime
                         : budget.FirstDay;
 
-                    var overlapEndDate = IsLastMonthOfPeriod(period, currentMonth)
+                    var overlapEndDate = period.EndTime < budget.LastDay
                         ? period.EndTime
                         : budget.LastDay;
 
