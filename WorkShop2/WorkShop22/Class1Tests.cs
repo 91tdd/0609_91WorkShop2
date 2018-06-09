@@ -53,6 +53,11 @@ namespace WorkShop2.Tests
         {
             BudgetResultShouldBe(new DateTime(2017, 12, 1), new DateTime(2018, 2, 1), 10m);
         }
+        [TestMethod()]
+        public void Test12()
+        {
+            BudgetResultShouldBe(new DateTime(2018, 01, 1), new DateTime(2018, 12, 31), 890);
+        }
         private void BudgetResultShouldBe(DateTime startTime, DateTime endTime, decimal expected)
         {
             var actual = _budgetCalculate.Result(startTime, endTime);

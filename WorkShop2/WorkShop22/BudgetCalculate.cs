@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorkShop2.Tests;
 
 namespace WorkShop22
@@ -16,28 +14,34 @@ namespace WorkShop22
             _budRepository = budRepository;
         }
 
-
         internal decimal Result(DateTime startTime, DateTime endTime)
         {
             var budgets = _budRepository.GetBudgets();
-            if (startTime.Month != endTime.Month)
-            {
-                var total = 0m;
-                total += CaluateBudget(startTime, new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1), budgets);
-                total += CaluateBudget(new DateTime(endTime.Year, endTime.Month, 1), endTime, budgets);
-                return total;
-            }
+            var total = 0m;
             if (startTime.Month == endTime.Month)
             {
+                var hasBudget = budgets.Exists(x => startTime.ToString("yyyyMM") == x.YearMonth ||
+                                                    endTime.ToString("yyyyMM") == x.YearMonth);
+                if (!hasBudget)
+                {
+                    return 0m;
+                }
                 return CaluateBudget(startTime, endTime, budgets);
             }
-            var hasBudget = budgets.Exists(x => startTime.ToString("yyyyMM") == x.YearMonth ||
-            endTime.ToString("yyyyMM") == x.YearMonth);
-            if (!hasBudget)
+            total += CaluateBudget(startTime, new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1), budgets);
+
+            total += CaluateBudget(new DateTime(endTime.Year, endTime.Month, 1), endTime, budgets);
+
+            DateTime Counter = startTime;
+            if (endTime.Month - startTime.Month >= 2)
             {
-                return 0m;
+                do
+                {
+                    total += CaluateBudget(Counter.AddMonths(1), Counter.AddMonths(2).AddDays(-1), budgets);
+                    Counter = Counter.AddMonths(1);
+                } while (Counter.Month != endTime.Month);
             }
-            return 300m;
+            return total;
         }
 
         private static int CaluateBudget(DateTime startTime, DateTime endTime, List<Budget> budgets)
