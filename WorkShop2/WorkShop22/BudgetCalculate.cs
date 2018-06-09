@@ -20,12 +20,6 @@ namespace WorkShop22
             var total = 0m;
             if (startTime.Month == endTime.Month)
             {
-                var hasBudget = budgets.Exists(x => startTime.ToString("yyyyMM") == x.YearMonth ||
-                                                    endTime.ToString("yyyyMM") == x.YearMonth);
-                if (!hasBudget)
-                {
-                    return 0m;
-                }
                 return CaluateBudget(startTime, endTime, budgets);
             }
             total += CaluateBudget(startTime, new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1), budgets);
@@ -33,15 +27,23 @@ namespace WorkShop22
             total += CaluateBudget(new DateTime(endTime.Year, endTime.Month, 1), endTime, budgets);
 
             DateTime Counter = startTime;
-            if (endTime.Month - startTime.Month >= 2)
+            if (IsOver2Months(startTime, endTime))
             {
                 do
                 {
                     total += CaluateBudget(Counter.AddMonths(1), Counter.AddMonths(2).AddDays(-1), budgets);
                     Counter = Counter.AddMonths(1);
-                } while (Counter.Month != endTime.Month);
+                } while (Counter.Month != endTime.AddMonths(-1).Month);
             }
             return total;
+        }
+
+        private static bool IsOver2Months(DateTime startTime, DateTime endTime)
+        {
+            var startTime1 = new DateTime(startTime.Year, startTime.Month, 1);
+            var endTime1 = new DateTime(endTime.Year, endTime.Month, 1);
+            return startTime1.AddMonths(2) < endTime1;
+            return endTime.Month - startTime.Month >= 2;
         }
 
         private static int CaluateBudget(DateTime startTime, DateTime endTime, List<Budget> budgets)
