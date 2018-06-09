@@ -16,11 +16,6 @@ namespace WorkShop2.Tests
         public void TestInit()
         {
             _budgetCalculator = new BudgetCalculator(_budgetRepository);
-            //GivenBudgets(
-            //    new Budget { YearMonth = "201802", Amount = 280 },
-            //    new Budget { YearMonth = "201806", Amount = 300 },
-            //    new Budget { YearMonth = "201807", Amount = 310 }
-            //);
         }
 
         [TestMethod]
