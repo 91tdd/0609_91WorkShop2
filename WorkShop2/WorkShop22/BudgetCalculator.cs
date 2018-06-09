@@ -25,9 +25,9 @@ namespace WorkShop22
                 return CalculateBudget(period.StartTime, period.EndTime, budgets);
             }
 
-            total += CalculateBudget(period.StartTime, endDayOfStartTimeMonth(period.StartTime), budgets);
+            total += CalculateBudget(period.StartTime, EndDayOfStartTimeMonth(period.StartTime), budgets);
 
-            total += CalculateBudget(startDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
+            total += CalculateBudget(StartDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
 
             DateTime Counter = period.StartTime;
             if (IsOver2Months(period.StartTime, period.EndTime))
@@ -41,12 +41,12 @@ namespace WorkShop22
             return total;
         }
 
-        private static DateTime startDayOfEndTimeMonth(DateTime endTime)
+        private static DateTime StartDayOfEndTimeMonth(DateTime endTime)
         {
             return new DateTime(endTime.Year, endTime.Month, 1);
         }
 
-        private static DateTime endDayOfStartTimeMonth(DateTime startTime)
+        private static DateTime EndDayOfStartTimeMonth(DateTime startTime)
         {
             return new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1);
         }
