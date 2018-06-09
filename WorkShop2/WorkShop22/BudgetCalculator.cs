@@ -37,31 +37,33 @@ namespace WorkShop22
         private static decimal TotalAmountWhenPeriodOverlapMultiMonths(Period period, List<Budget> budgets)
         {
             var total = 0m;
-            total += CalculateBudget(period.StartTime, EndDayOfStartTimeMonth(period.StartTime), budgets);
-
-            total += CalculateBudget(StartDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
-
-            DateTime Counter = period.StartTime;
-            if (IsOver2Months(period.StartTime, period.EndTime))
+            var currentMonth = period.StartTime;
+            while (currentMonth <= period.EndTime.AddMonths(1))
             {
-                do
-                {
-                    total += CalculateBudget(Counter.AddMonths(1), Counter.AddMonths(2).AddDays(-1), budgets);
-                    Counter = Counter.AddMonths(1);
-                } while (Counter.Month != period.EndTime.AddMonths(-1).Month);
+                var overlapStartDate = currentMonth.ToString("yyyyMM") == period.StartTime.ToString("yyyyMM")
+                    ? period.StartTime
+                    : GetFirstDay(currentMonth);
+
+                var overlapEndDate = currentMonth.ToString("yyyyMM") == period.EndTime.ToString("yyyyMM")
+                    ? period.EndTime
+                    : GetLastDay(currentMonth);
+
+                var amountOfCurrentMonth = CalculateBudget(overlapStartDate, overlapEndDate, budgets);
+                total += amountOfCurrentMonth;
+                currentMonth = currentMonth.AddMonths(1);
             }
 
             return total;
         }
 
-        private static DateTime StartDayOfEndTimeMonth(DateTime endTime)
+        private static DateTime GetFirstDay(DateTime currentDate)
         {
-            return new DateTime(endTime.Year, endTime.Month, 1);
+            return new DateTime(currentDate.Year, currentDate.Month, 1);
         }
 
-        private static DateTime EndDayOfStartTimeMonth(DateTime startTime)
+        private static DateTime GetLastDay(DateTime currentDate)
         {
-            return new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1);
+            return new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(1).AddDays(-1);
         }
 
         private static bool IsOver2Months(DateTime startTime, DateTime endTime)
