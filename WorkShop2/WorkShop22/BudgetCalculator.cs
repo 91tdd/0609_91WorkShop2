@@ -40,11 +40,11 @@ namespace WorkShop22
             var currentMonth = period.StartTime;
             while (currentMonth <= period.EndTime.AddMonths(1))
             {
-                var overlapStartDate = currentMonth.ToString("yyyyMM") == period.StartTime.ToString("yyyyMM")
+                var overlapStartDate = IsFirstMonthOfPeriod(period, currentMonth)
                     ? period.StartTime
                     : GetFirstDay(currentMonth);
 
-                var overlapEndDate = currentMonth.ToString("yyyyMM") == period.EndTime.ToString("yyyyMM")
+                var overlapEndDate = IsLastMonthOfPeriod(period, currentMonth)
                     ? period.EndTime
                     : GetLastDay(currentMonth);
 
@@ -54,6 +54,16 @@ namespace WorkShop22
             }
 
             return total;
+        }
+
+        private static bool IsLastMonthOfPeriod(Period period, DateTime currentMonth)
+        {
+            return currentMonth.ToString("yyyyMM") == period.EndTime.ToString("yyyyMM");
+        }
+
+        private static bool IsFirstMonthOfPeriod(Period period, DateTime currentMonth)
+        {
+            return currentMonth.ToString("yyyyMM") == period.StartTime.ToString("yyyyMM");
         }
 
         private static DateTime GetFirstDay(DateTime currentDate)
