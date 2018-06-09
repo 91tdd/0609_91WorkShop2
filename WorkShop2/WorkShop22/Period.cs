@@ -30,6 +30,11 @@ namespace WorkShop22
 
         public int OverlappingDays(Period otherPeriod)
         {
+            if (HasNoOverlap(otherPeriod))
+            {
+                return 0;
+            }
+
             var overlapStartDate = StartTime > otherPeriod.StartTime
                 ? StartTime
                 : otherPeriod.StartTime;
@@ -40,6 +45,11 @@ namespace WorkShop22
 
             var overlappingDays = new Period(overlapStartDate, overlapEndDate).Days();
             return overlappingDays;
+        }
+
+        private bool HasNoOverlap(Period otherPeriod)
+        {
+            return otherPeriod.EndTime < StartTime || otherPeriod.StartTime > EndTime;
         }
     }
 }

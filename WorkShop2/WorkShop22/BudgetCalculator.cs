@@ -37,15 +37,9 @@ namespace WorkShop22
         private static decimal TotalAmountWhenPeriodOverlapMultiMonths(Period period, List<Budget> budgets)
         {
             var total = 0m;
-            var currentMonth = period.StartTime;
-            while (currentMonth <= period.EndTime.AddMonths(1))
+            foreach (var budget in budgets)
             {
-                var budget = budgets.SingleOrDefault(x => x.YearMonth == currentMonth.ToString("yyyyMM"));
-                if (budget != null)
-                {
-                    total += budget.OverlappingAmount(period);
-                }
-                currentMonth = currentMonth.AddMonths(1);
+                total += budget.OverlappingAmount(period);
             }
 
             return total;
