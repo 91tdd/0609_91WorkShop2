@@ -32,12 +32,7 @@ namespace WorkShop22
                 ? EndTime
                 : otherPeriod.EndTime;
 
-            return new Period(overlapStartDate, overlapEndDate).Days();
-        }
-
-        private int Days()
-        {
-            return EndTime.Subtract(StartTime).Days + 1;
+            return (overlapEndDate - overlapStartDate).Days + 1;
         }
 
         private bool HasNoOverlap(Period otherPeriod)
