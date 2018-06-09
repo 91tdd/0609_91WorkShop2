@@ -20,12 +20,23 @@ namespace WorkShop22
             var budgets = _budRepository.GetBudgets();
             var budget = budgets.SingleOrDefault(x => x.YearMonth == period.StartTime.ToString("yyyyMM"));
 
-            var total = 0m;
             if (period.IsSameMonth())
             {
-                return TotalAmountWhenPeriodIsSameMonth(budget, period);
+                if (budget == null)
+                {
+                    return 0;
+                }
+
+                return period.Days() * budget.DailyAmount();
             }
 
+            var total = TotalAmountWhenPeriodOverlapMultiMonths(period, budgets);
+            return total;
+        }
+
+        private static decimal TotalAmountWhenPeriodOverlapMultiMonths(Period period, List<Budget> budgets)
+        {
+            var total = 0m;
             total += CalculateBudget(period.StartTime, EndDayOfStartTimeMonth(period.StartTime), budgets);
 
             total += CalculateBudget(StartDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
@@ -39,17 +50,8 @@ namespace WorkShop22
                     Counter = Counter.AddMonths(1);
                 } while (Counter.Month != period.EndTime.AddMonths(-1).Month);
             }
+
             return total;
-        }
-
-        private static decimal TotalAmountWhenPeriodIsSameMonth(Budget budget, Period period)
-        {
-            if (budget == null)
-            {
-                return 0;
-            }
-
-            return period.Days() * budget.DailyAmount();
         }
 
         private static DateTime StartDayOfEndTimeMonth(DateTime endTime)
