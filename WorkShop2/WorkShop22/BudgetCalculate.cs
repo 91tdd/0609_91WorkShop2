@@ -23,7 +23,7 @@ namespace WorkShop22
             if (startTime.Month != endTime.Month)
             {
                 var total = 0m;
-                total += CaluateBudget(startTime, new DateTime(startTime.Year, startTime.Month + 1, 1).AddDays(-1), budgets);
+                total += CaluateBudget(startTime, new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1), budgets);
                 total += CaluateBudget(new DateTime(endTime.Year, endTime.Month, 1), endTime, budgets);
                 return total;
             }
