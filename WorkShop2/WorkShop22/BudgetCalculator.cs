@@ -41,23 +41,20 @@ namespace WorkShop22
             while (currentMonth <= period.EndTime.AddMonths(1))
             {
                 var budget = budgets.SingleOrDefault(x => x.YearMonth == currentMonth.ToString("yyyyMM"));
-                if (budget == null)
+                if (budget != null)
                 {
-                    currentMonth = currentMonth.AddMonths(1);
-                    continue;
+                    var overlapStartDate = IsFirstMonthOfPeriod(period, currentMonth)
+                        ? period.StartTime
+                        : budget.FirstDay;
+
+                    var overlapEndDate = IsLastMonthOfPeriod(period, currentMonth)
+                        ? period.EndTime
+                        : budget.LastDay;
+
+                    var overlappingDays = new Period(overlapStartDate, overlapEndDate).Days();
+                    var amountOfCurrentMonth = overlappingDays * budget.DailyAmount();
+                    total += amountOfCurrentMonth;
                 }
-
-                var overlapStartDate = IsFirstMonthOfPeriod(period, currentMonth)
-                    ? period.StartTime
-                    : budget.FirstDay;
-
-                var overlapEndDate = IsLastMonthOfPeriod(period, currentMonth)
-                    ? period.EndTime
-                    : budget.LastDay;
-
-                var overlappingDays = new Period(overlapStartDate, overlapEndDate).Days();
-                var amountOfCurrentMonth = overlappingDays * budget.DailyAmount();
-                total += amountOfCurrentMonth;
                 currentMonth = currentMonth.AddMonths(1);
             }
 
