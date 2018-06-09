@@ -4,12 +4,28 @@ namespace WorkShop2.Tests
 {
     public class Budget
     {
-        public string YearMonth { get; set; }
         public int Amount { get; set; }
+        public string YearMonth { get; set; }
 
-        public DateTime FirstDay
+        private int DaysInMonth
         {
-            get { return DateTime.ParseExact(YearMonth + "01", "yyyyMMdd", null); }
+            get
+            {
+                return DateTime.DaysInMonth(FirstDay.Year, FirstDay.Month);
+            }
+        }
+
+        private DateTime FirstDay
+        {
+            get
+            {
+                return DateTime.ParseExact(YearMonth + "01", "yyyyMMdd", null);
+            }
+        }
+
+        public int DailyAmount()
+        {
+            return Amount / DaysInMonth;
         }
     }
 }

@@ -67,8 +67,7 @@ namespace WorkShop22
             }
 
             var days = endTime.Subtract(startTime).Days + 1;
-            var daysInMonth = DateTime.DaysInMonth(budget.FirstDay.Year, budget.FirstDay.Month);
-            return days * budget.Amount / daysInMonth;
+            return days * budget.DailyAmount();
         }
     }
 }
