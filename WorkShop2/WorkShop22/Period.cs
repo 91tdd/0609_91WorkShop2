@@ -27,5 +27,19 @@ namespace WorkShop22
             var days = EndTime.Subtract(StartTime).Days + 1;
             return days;
         }
+
+        public int OverlappingDays(Period otherPeriod)
+        {
+            var overlapStartDate = StartTime > otherPeriod.StartTime
+                ? StartTime
+                : otherPeriod.StartTime;
+
+            var overlapEndDate = EndTime < otherPeriod.EndTime
+                ? EndTime
+                : otherPeriod.EndTime;
+
+            var overlappingDays = new Period(overlapStartDate, overlapEndDate).Days();
+            return overlappingDays;
+        }
     }
 }
