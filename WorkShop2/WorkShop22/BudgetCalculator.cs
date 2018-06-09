@@ -14,9 +14,9 @@ namespace WorkShop22
             _budRepository = budRepository;
         }
 
-        internal decimal Result(DateTime startTime, DateTime endTime)
+        internal decimal TotalAmount(DateTime startTime, DateTime endTime)
         {
-            if (IsInputError(startTime, endTime))
+            if (IsInvalidPeriod(startTime, endTime))
             {
                 throw new ArgumentException();
             }
@@ -52,9 +52,9 @@ namespace WorkShop22
             return new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1);
         }
 
-        private static bool IsInputError(DateTime startTime, DateTime endTime)
+        private static bool IsInvalidPeriod(DateTime startTime, DateTime endTime)
         {
-            return startTime>endTime;
+            return startTime > endTime;
         }
 
         private static bool IsOver2Months(DateTime startTime, DateTime endTime)
@@ -62,7 +62,6 @@ namespace WorkShop22
             var startTime1 = new DateTime(startTime.Year, startTime.Month, 1);
             var endTime1 = new DateTime(endTime.Year, endTime.Month, 1);
             return startTime1.AddMonths(2) < endTime1;
-            return endTime.Month - startTime.Month >= 2;
         }
 
         private static int CaluateBudget(DateTime startTime, DateTime endTime, List<Budget> budgets)
