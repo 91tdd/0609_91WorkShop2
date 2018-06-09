@@ -16,10 +16,7 @@ namespace WorkShop22
 
         internal decimal TotalAmount(DateTime startTime, DateTime endTime)
         {
-            if (IsInvalidPeriod(startTime, endTime))
-            {
-                throw new ArgumentException();
-            }
+            var period = new Period(startTime, endTime);
             var budgets = _budRepository.GetBudgets();
             var total = 0m;
             if (startTime.Month == endTime.Month)
@@ -50,11 +47,6 @@ namespace WorkShop22
         private static DateTime endDayOfStartTimeMonth(DateTime startTime)
         {
             return new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1);
-        }
-
-        private static bool IsInvalidPeriod(DateTime startTime, DateTime endTime)
-        {
-            return startTime > endTime;
         }
 
         private static bool IsOver2Months(DateTime startTime, DateTime endTime)

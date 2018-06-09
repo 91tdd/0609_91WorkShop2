@@ -66,6 +66,7 @@
     <Compile Include="BudgetCalculator.cs" />
     <Compile Include="BudgetCalculatorTests.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="Period.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
