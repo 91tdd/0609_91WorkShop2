@@ -18,11 +18,12 @@ namespace WorkShop22
         {
             var period = new Period(startTime, endTime);
             var budgets = _budRepository.GetBudgets();
+            var budget = budgets.SingleOrDefault(x => x.YearMonth == period.StartTime.ToString("yyyyMM"));
 
             var total = 0m;
             if (period.IsSameMonth())
             {
-                return CalculateBudget(period.StartTime, period.EndTime, budgets);
+                return TotalAmountWhenPeriodIsSameMonth(budget, period);
             }
 
             total += CalculateBudget(period.StartTime, EndDayOfStartTimeMonth(period.StartTime), budgets);
@@ -39,6 +40,16 @@ namespace WorkShop22
                 } while (Counter.Month != period.EndTime.AddMonths(-1).Month);
             }
             return total;
+        }
+
+        private static decimal TotalAmountWhenPeriodIsSameMonth(Budget budget, Period period)
+        {
+            if (budget == null)
+            {
+                return 0;
+            }
+
+            return period.Days() * budget.DailyAmount();
         }
 
         private static DateTime StartDayOfEndTimeMonth(DateTime endTime)

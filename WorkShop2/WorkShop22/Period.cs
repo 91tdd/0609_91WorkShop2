@@ -21,5 +21,11 @@ namespace WorkShop22
         {
             return StartTime.Month == EndTime.Month;
         }
+
+        public int Days()
+        {
+            var days = EndTime.Subtract(StartTime).Days + 1;
+            return days;
+        }
     }
 }
