@@ -59,12 +59,12 @@ namespace WorkShop22
         private static int CalculateBudget(DateTime startTime, DateTime endTime, List<Budget> budgets)
         {
             var budget = budgets.SingleOrDefault(x => x.YearMonth == startTime.ToString("yyyyMM"));
-            if (budget==null)
+            if (budget == null)
             {
                 return 0;
             }
 
-            return new Period(startTime, endTime).Days() * budget.Amount / DateTime.DaysInMonth(startTime.Year, startTime.Month);
+            return new Period(startTime, endTime).Days() * budget.Amount / budget.DaysInMonth();
         }
     }
 }
