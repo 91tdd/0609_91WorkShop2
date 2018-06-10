@@ -18,16 +18,6 @@ namespace WorkShop22
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
 
-        public bool IsSameMonth()
-        {
-            return StartTime.Month == EndTime.Month;
-        }
-
-        public int Days()
-        {
-            return EndTime.Subtract(StartTime).Days + 1;
-        }
-
         public int OverlapDays(Period otherPeriod)
         {
             if (HasNoOverlap(otherPeriod))
