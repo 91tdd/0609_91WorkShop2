@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using WorkShop2.Tests;
 
@@ -17,44 +16,7 @@ namespace WorkShop22
         internal decimal TotalAmount(DateTime startTime, DateTime endTime)
         {
             var period = new Period(startTime, endTime);
-            var budgets = _budgetRepository.GetBudgets();
-            if (period.IsSameMonth())
-            {
-                var budget = budgets.SingleOrDefault(x => x.YearMonth == period.StartTime.ToString("yyyyMM"));
-                if (budget == null)
-                {
-                    return 0;
-                }
-
-                return period.Days() * budget.DailyAmount();
-            }
-
-            return TotalAmountWhenMultiMonthsPeriod(period, budgets);
-        }
-
-        private static decimal TotalAmountWhenMultiMonthsPeriod(Period period, List<Budget> budgets)
-        {
-            var total = 0m;
-            foreach (var budget in budgets)
-            {
-                total += budget.EffectiveAmount(period);
-            }
-
-            return total;
-            DateTime currentMonth = period.StartTime;
-            while (currentMonth <= period.EndTime.AddMonths(1))
-            {
-                var budget = budgets.SingleOrDefault(x => x.YearMonth == currentMonth.ToString("yyyyMM"));
-
-                if (budget != null)
-                {
-                    total += budget.EffectiveAmount(period);
-                }
-
-                currentMonth = currentMonth.AddMonths(1);
-            }
-
-            return total;
+            return _budgetRepository.GetBudgets().Sum(b => b.EffectiveAmount(period));
         }
     }
 }
