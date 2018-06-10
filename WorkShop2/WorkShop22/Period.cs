@@ -38,8 +38,7 @@ namespace WorkShop22
                 ? EndTime
                 : period.EndTime;
 
-            var overlapDays = (overlapEnd.AddDays(1) - overlapStart).Days;
-            return overlapDays;
+            return (overlapEnd.AddDays(1) - overlapStart).Days;
         }
     }
 }

@@ -42,19 +42,13 @@ namespace WorkShop22
 
                 if (budget != null)
                 {
-                    var effectiveAmount = EffectiveAmount(period, budget);
-                    total += effectiveAmount;
+                    total += budget.EffectiveAmount(period);
                 }
 
                 currentMonth = currentMonth.AddMonths(1);
             }
 
             return total;
-        }
-
-        private static int EffectiveAmount(Period period, Budget budget)
-        {
-            return period.OverlapDays(new Period(budget.FirstDay, budget.LastDay)) * budget.DailyAmount();
         }
     }
 }
