@@ -50,7 +50,7 @@ namespace WorkShop22
                         ? period.EndTime
                         : budget.LastDay;
 
-                    var effectiveAmount = CalculateBudget(overlapStart, overlapEnd, budgets);
+                    var effectiveAmount = CalculateBudget(overlapStart, overlapEnd, budget);
                     total += effectiveAmount;
                 }
 
@@ -77,9 +77,8 @@ namespace WorkShop22
             return startTime1.AddMonths(2) < endTime1;
         }
 
-        private static int CalculateBudget(DateTime startTime, DateTime endTime, List<Budget> budgets)
+        private static int CalculateBudget(DateTime startTime, DateTime endTime, Budget budget)
         {
-            var budget = budgets.SingleOrDefault(x => x.YearMonth == startTime.ToString("yyyyMM"));
             if (budget == null)
             {
                 return 0;
