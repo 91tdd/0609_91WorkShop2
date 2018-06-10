@@ -102,12 +102,12 @@ namespace WorkShop2.Tests
         [TestMethod()]
         public void ThrowException()
         {
-            var result = _budgetCalculator.Result(new DateTime(2018, 5, 1), new DateTime(2018, 4, 30));
+            var result = _budgetCalculator.TotalAmount(new DateTime(2018, 5, 1), new DateTime(2018, 4, 30));
         }
 
         private void BudgetResultShouldBe(DateTime startTime, DateTime endTime, decimal expected)
         {
-            Assert.AreEqual(expected, _budgetCalculator.Result(startTime, endTime));
+            Assert.AreEqual(expected, _budgetCalculator.TotalAmount(startTime, endTime));
         }
 
         private void GivenBudgets(params Budget[] budgets)
