@@ -5,7 +5,6 @@ namespace WorkShop2.Tests
 {
     public class Budget
     {
-        public string YearMonth { get; set; }
         public int Amount { get; set; }
 
         public DateTime FirstDay
@@ -15,27 +14,35 @@ namespace WorkShop2.Tests
 
         public DateTime LastDay
         {
-            get { return DateTime.ParseExact(YearMonth + DaysInMonth(), "yyyyMMdd", null); }
+            get { return DateTime.ParseExact(YearMonth + DaysInMonth, "yyyyMMdd", null); }
         }
 
-        private int DaysInMonth()
+        public string YearMonth { get; set; }
+
+        private int DailyAmount
         {
-            return DateTime.DaysInMonth(FirstDay.Year, FirstDay.Month);
+            get
+            {
+                return Amount / DaysInMonth;
+            }
         }
 
-        public int DailyAmount()
+        private int DaysInMonth
         {
-            return Amount / DaysInMonth();
-        }
-
-        public Period GetPeriod()
-        {
-            return new Period(FirstDay, LastDay);
+            get
+            {
+                return DateTime.DaysInMonth(FirstDay.Year, FirstDay.Month);
+            }
         }
 
         public int EffectiveAmount(Period period)
         {
-            return period.OverlapDays(GetPeriod()) * DailyAmount();
+            return period.OverlapDays(GetPeriod()) * DailyAmount;
+        }
+
+        private Period GetPeriod()
+        {
+            return new Period(FirstDay, LastDay);
         }
     }
 }
