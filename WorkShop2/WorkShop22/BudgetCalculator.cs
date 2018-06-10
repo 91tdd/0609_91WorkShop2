@@ -54,7 +54,7 @@ namespace WorkShop22
 
         private static int EffectiveAmount(Period period, Budget budget)
         {
-            return period.OverlapDays(budget) * budget.DailyAmount();
+            return period.OverlapDays(new Period(budget.FirstDay, budget.LastDay)) * budget.DailyAmount();
         }
     }
 }
