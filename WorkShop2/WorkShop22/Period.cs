@@ -1,4 +1,5 @@
 ﻿using System;
+using WorkShop2.Tests;
 
 namespace WorkShop22
 {
@@ -26,6 +27,20 @@ namespace WorkShop22
         public int Days()
         {
             return EndTime.Subtract(StartTime).Days + 1;
+        }
+
+        public int OverlapDays(Budget budget)
+        {
+            var overlapStart = StartTime.ToString("yyyyMM") == budget.YearMonth
+                ? StartTime
+                : budget.FirstDay;
+
+            var overlapEnd = EndTime.ToString("yyyyMM") == budget.YearMonth
+                ? EndTime
+                : budget.LastDay;
+
+            var overlapDays = (overlapEnd.AddDays(1) - overlapStart).Days;
+            return overlapDays;
         }
     }
 }

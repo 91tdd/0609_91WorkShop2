@@ -42,15 +42,7 @@ namespace WorkShop22
 
                 if (budget != null)
                 {
-                    var overlapStart = period.StartTime.ToString("yyyyMM") == currentMonth.ToString("yyyyMM")
-                        ? period.StartTime
-                        : budget.FirstDay;
-
-                    var overlapEnd = period.EndTime.ToString("yyyyMM") == currentMonth.ToString("yyyyMM")
-                        ? period.EndTime
-                        : budget.LastDay;
-
-                    var effectiveAmount = CalculateBudget(overlapStart, overlapEnd, budget);
+                    var effectiveAmount = EffectiveAmount(period, budget);
                     total += effectiveAmount;
                 }
 
@@ -60,31 +52,9 @@ namespace WorkShop22
             return total;
         }
 
-        private static DateTime startDayOfEndTimeMonth(DateTime endTime)
+        private static int EffectiveAmount(Period period, Budget budget)
         {
-            return new DateTime(endTime.Year, endTime.Month, 1);
-        }
-
-        private static DateTime endDayOfStartTimeMonth(DateTime startTime)
-        {
-            return new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1);
-        }
-
-        private static bool IsOver2Months(DateTime startTime, DateTime endTime)
-        {
-            var startTime1 = new DateTime(startTime.Year, startTime.Month, 1);
-            var endTime1 = new DateTime(endTime.Year, endTime.Month, 1);
-            return startTime1.AddMonths(2) < endTime1;
-        }
-
-        private static int CalculateBudget(DateTime startTime, DateTime endTime, Budget budget)
-        {
-            if (budget == null)
-            {
-                return 0;
-            }
-
-            return new Period(startTime, endTime).Days() * budget.DailyAmount();
+            return period.OverlapDays(budget) * budget.DailyAmount();
         }
     }
 }
