@@ -28,17 +28,27 @@ namespace WorkShop22
             return EndTime.Subtract(StartTime).Days + 1;
         }
 
-        public int OverlapDays(Period period)
+        public int OverlapDays(Period otherPeriod)
         {
-            var overlapStart = StartTime > period.StartTime
-                ? StartTime
-                : period.StartTime;
+            if (HasNoOverlap(otherPeriod))
+            {
+                return 0;
+            }
 
-            var overlapEnd = EndTime < period.EndTime
+            var overlapStart = StartTime > otherPeriod.StartTime
+                ? StartTime
+                : otherPeriod.StartTime;
+
+            var overlapEnd = EndTime < otherPeriod.EndTime
                 ? EndTime
-                : period.EndTime;
+                : otherPeriod.EndTime;
 
             return (overlapEnd.AddDays(1) - overlapStart).Days;
+        }
+
+        private bool HasNoOverlap(Period otherPeriod)
+        {
+            return otherPeriod.EndTime < StartTime || otherPeriod.StartTime > EndTime;
         }
     }
 }

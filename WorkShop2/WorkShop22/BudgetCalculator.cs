@@ -35,6 +35,12 @@ namespace WorkShop22
         private static decimal TotalAmountWhenMultiMonthsPeriod(Period period, List<Budget> budgets)
         {
             var total = 0m;
+            foreach (var budget in budgets)
+            {
+                total += budget.EffectiveAmount(period);
+            }
+
+            return total;
             DateTime currentMonth = period.StartTime;
             while (currentMonth <= period.EndTime.AddMonths(1))
             {
