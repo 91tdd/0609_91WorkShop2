@@ -21,8 +21,15 @@ namespace WorkShop22
             var total = 0m;
             if (period.IsSameMonth())
             {
-                return CalculateBudget(period.StartTime, period.EndTime, budgets);
+                var budget = budgets.SingleOrDefault(x => x.YearMonth == period.StartTime.ToString("yyyyMM"));
+                if (budget == null)
+                {
+                    return 0;
+                }
+
+                return period.Days() * budget.DailyAmount();
             }
+
             total += CalculateBudget(period.StartTime, endDayOfStartTimeMonth(period.StartTime), budgets);
 
             total += CalculateBudget(startDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
