@@ -15,10 +15,14 @@ namespace WorkShop2.Tests
             }
         }
 
-        public int DaysInMonth()
+        private int DaysInMonth()
         {
-            var daysInMonth = DateTime.DaysInMonth(FirstDay.Year, FirstDay.Month);
-            return daysInMonth;
+            return DateTime.DaysInMonth(FirstDay.Year, FirstDay.Month);
+        }
+
+        public int DailyAmount()
+        {
+            return Amount / DaysInMonth();
         }
     }
 }
