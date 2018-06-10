@@ -98,6 +98,17 @@ namespace WorkShop2.Tests
             BudgetResultShouldBe(new DateTime(2018, 01, 1), new DateTime(2018, 12, 31), 890);
         }
 
+        [TestMethod]
+        public void CrossYear()
+        {
+            GivenBudgets(
+                new Budget { YearMonth = "201802", Amount = 280 },
+                new Budget { YearMonth = "201808", Amount = 310 },
+                new Budget { YearMonth = "201906", Amount = 300 }
+            );
+            BudgetResultShouldBe(new DateTime(2018, 1, 1), new DateTime(2019, 12, 31), 890);
+        }
+
         [ExpectedException(typeof(ArgumentException))]
         [TestMethod()]
         public void ThrowException()

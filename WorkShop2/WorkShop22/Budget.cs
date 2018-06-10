@@ -9,10 +9,12 @@ namespace WorkShop2.Tests
 
         public DateTime FirstDay
         {
-            get
-            {
-                return DateTime.ParseExact(YearMonth + "01", "yyyyMMdd", null);
-            }
+            get { return DateTime.ParseExact(YearMonth + "01", "yyyyMMdd", null); }
+        }
+
+        public DateTime LastDay
+        {
+            get { return DateTime.ParseExact(YearMonth + DaysInMonth(), "yyyyMMdd", null); }
         }
 
         private int DaysInMonth()

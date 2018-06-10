@@ -30,19 +30,39 @@ namespace WorkShop22
                 return period.Days() * budget.DailyAmount();
             }
 
-            total += CalculateBudget(period.StartTime, endDayOfStartTimeMonth(period.StartTime), budgets);
-
-            total += CalculateBudget(startDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
-
-            DateTime Counter = period.StartTime;
-            if (IsOver2Months(period.StartTime, period.EndTime))
+            DateTime currentMonth = period.StartTime;
+            while (currentMonth <= period.EndTime.AddMonths(1))
             {
-                do
+                var budget = budgets.SingleOrDefault(x => x.YearMonth == currentMonth.ToString("yyyyMM"));
+
+                if (budget != null)
                 {
-                    total += CalculateBudget(Counter.AddMonths(1), Counter.AddMonths(2).AddDays(-1), budgets);
-                    Counter = Counter.AddMonths(1);
-                } while (Counter.Month != period.EndTime.AddMonths(-1).Month);
+                    var overlapStart = period.StartTime.ToString("yyyyMM") == currentMonth.ToString("yyyyMM")
+                        ? period.StartTime
+                        : budget.FirstDay;
+                    var overlapEnd = period.EndTime.ToString("yyyyMM") == currentMonth.ToString("yyyyMM")
+                        ? period.EndTime
+                        : budget.LastDay;
+
+                    var effectiveAmount = CalculateBudget(overlapStart, overlapEnd, budgets);
+                    total += effectiveAmount;
+                }
+
+                currentMonth = currentMonth.AddMonths(1);
             }
+
+            //total += CalculateBudget(period.StartTime, endDayOfStartTimeMonth(period.StartTime), budgets);
+
+            //total += CalculateBudget(startDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
+
+            //if (IsOver2Months(period.StartTime, period.EndTime))
+            //{
+            //    do
+            //    {
+            //        total += CalculateBudget(currentMonth.AddMonths(1), currentMonth.AddMonths(2).AddDays(-1), budgets);
+            //        currentMonth = currentMonth.AddMonths(1);
+            //    } while (currentMonth.Month != period.EndTime.AddMonths(-1).Month);
+            //}
             return total;
         }
 
