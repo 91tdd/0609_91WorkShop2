@@ -100,15 +100,14 @@ namespace WorkShop2.Tests
 
         [ExpectedException(typeof(ArgumentException))]
         [TestMethod()]
-        public void ThrowExpection()
+        public void ThrowException()
         {
             var result = _budgetCalculator.Result(new DateTime(2018, 5, 1), new DateTime(2018, 4, 30));
         }
 
         private void BudgetResultShouldBe(DateTime startTime, DateTime endTime, decimal expected)
         {
-            var actual = _budgetCalculator.Result(startTime, endTime);
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, _budgetCalculator.Result(startTime, endTime));
         }
 
         private void GivenBudgets(params Budget[] budgets)
