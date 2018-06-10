@@ -7,20 +7,20 @@ namespace WorkShop22
 {
     public class BudgetCalculator
     {
-        private readonly IRepository<Budget> _budRepository;
+        private readonly IRepository<Budget> _budgetRepository;
 
-        public BudgetCalculator(IRepository<Budget> budRepository)
+        public BudgetCalculator(IRepository<Budget> budgetRepository)
         {
-            _budRepository = budRepository;
+            _budgetRepository = budgetRepository;
         }
 
         internal decimal Result(DateTime startTime, DateTime endTime)
         {
-            if (IsInputError(startTime, endTime))
+            if (IsInvalidPeriod(startTime, endTime))
             {
                 throw new ArgumentException();
             }
-            var budgets = _budRepository.GetBudgets();
+            var budgets = _budgetRepository.GetBudgets();
             var total = 0m;
             if (startTime.Month == endTime.Month)
             {
@@ -52,9 +52,9 @@ namespace WorkShop22
             return new DateTime(startTime.Year, startTime.Month, 1).AddMonths(1).AddDays(-1);
         }
 
-        private static bool IsInputError(DateTime startTime, DateTime endTime)
+        private static bool IsInvalidPeriod(DateTime startTime, DateTime endTime)
         {
-            return startTime>endTime;
+            return startTime > endTime;
         }
 
         private static bool IsOver2Months(DateTime startTime, DateTime endTime)
