@@ -18,7 +18,6 @@ namespace WorkShop22
         {
             var period = new Period(startTime, endTime);
             var budgets = _budgetRepository.GetBudgets();
-            var total = 0m;
             if (period.IsSameMonth())
             {
                 var budget = budgets.SingleOrDefault(x => x.YearMonth == period.StartTime.ToString("yyyyMM"));
@@ -30,6 +29,12 @@ namespace WorkShop22
                 return period.Days() * budget.DailyAmount();
             }
 
+            return TotalAmountWhenMultiMonthsPeriod(period, budgets);
+        }
+
+        private static decimal TotalAmountWhenMultiMonthsPeriod(Period period, List<Budget> budgets)
+        {
+            var total = 0m;
             DateTime currentMonth = period.StartTime;
             while (currentMonth <= period.EndTime.AddMonths(1))
             {
@@ -40,6 +45,7 @@ namespace WorkShop22
                     var overlapStart = period.StartTime.ToString("yyyyMM") == currentMonth.ToString("yyyyMM")
                         ? period.StartTime
                         : budget.FirstDay;
+
                     var overlapEnd = period.EndTime.ToString("yyyyMM") == currentMonth.ToString("yyyyMM")
                         ? period.EndTime
                         : budget.LastDay;
@@ -51,18 +57,6 @@ namespace WorkShop22
                 currentMonth = currentMonth.AddMonths(1);
             }
 
-            //total += CalculateBudget(period.StartTime, endDayOfStartTimeMonth(period.StartTime), budgets);
-
-            //total += CalculateBudget(startDayOfEndTimeMonth(period.EndTime), period.EndTime, budgets);
-
-            //if (IsOver2Months(period.StartTime, period.EndTime))
-            //{
-            //    do
-            //    {
-            //        total += CalculateBudget(currentMonth.AddMonths(1), currentMonth.AddMonths(2).AddDays(-1), budgets);
-            //        currentMonth = currentMonth.AddMonths(1);
-            //    } while (currentMonth.Month != period.EndTime.AddMonths(-1).Month);
-            //}
             return total;
         }
 
