@@ -5,11 +5,11 @@ using WorkShop2.Tests;
 
 namespace WorkShop22
 {
-    public class BudgetCalculate
+    public class BudgetCalculator
     {
         private readonly IRepository<Budget> _budRepository;
 
-        public BudgetCalculate(IRepository<Budget> budRepository)
+        public BudgetCalculator(IRepository<Budget> budRepository)
         {
             _budRepository = budRepository;
         }
